@@ -1,0 +1,6 @@
+{
+    "name": "campaignchain-form-type-autocomplete",
+    "dependencies": {
+        "jquery.atwho": "1.*"
+    }
+}
