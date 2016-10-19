@@ -16,6 +16,9 @@
         "issues": "https://github.com/CampaignChain/campaignchain/issues",
         "docs": "http://doc.campaignchain.com"
     },
+    "require": {
+        "campaignchain/form-type-textarea-count": "dev-master"
+    },
     "autoload": {
         "psr-4": { "CampaignChain\\AutocompleteFormTypeBundle\\": "" }
     },
