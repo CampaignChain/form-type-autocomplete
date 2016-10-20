@@ -24,6 +24,7 @@ assetic:
         at_css:
             inputs:
                 - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/components/jquery.atwho/dist/css/jquery.atwho.min.css"
+                - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/css/base.css"
         at_js:
             inputs:
                 - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/components/Caret.js/dist/jquery.caret.min.js"

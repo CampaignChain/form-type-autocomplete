@@ -32,10 +32,36 @@ limitations under the License.
         $(document).ready(function() {
             $('#{{ id }}').atwho({
                 at: "@",
-                data: ["one", "two", "three"],
-            }).atwho({
-                at: "#",
-                data: ["hash1", "hash2", "hash3"]
+                displayTpl: "<li><h5><img src='${image}' height='32' width='32'/> ${display_name} <small>${atwho-at}${insert_name}</small></h5></li>",
+                insertTpl: "${atwho-at}${insert_name}",
+                searchKey: "search_key",
+                limit: 6,
+                delay: 500,
+                callbacks: {
+                    beforeReposition: function(offset) {
+                        var offsetTextarea = $('#{{ id }}').offset();
+                        offset.top = offsetTextarea.top + $('#{{ id }}').outerHeight(true);
+                        offset.left = offsetTextarea.left;
+                    },
+                    /*
+                     It function is given, At.js will invoke it if local filter can not find any data
+                     @param query [String] matched query
+                     @param callback [Function] callback to render page.
+                     */
+                    remoteFilter: function(query, callback) {
+                        if(query) {
+                            $.getJSON("/api/v1/p/campaignchain/channel-twitter/users/search", {
+                                q: query,
+                                location: 131,
+                            }, function (data) {
+                                callback(data);
+                            });
+                        }
+                    }
+                }
+//            }).atwho({
+//                at: "#",
+//                data: ["hash1", "hash2", "hash3"]
             });
         });
     </script>
