@@ -19,9 +19,44 @@ namespace CampaignChain\AutocompleteFormTypeBundle\Form\Type;
 
 use CampaignChain\TextareaCountFormTypeBundle\Form\Type\TextareaCountType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AutocompleteType extends AbstractType
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            array(
+                'campaignchain_autocomplete' => null,
+            )
+        );
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['campaignchain_autocomplete'] = $options['campaignchain_autocomplete'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->setAttribute('campaignchain_autocomplete', $options['campaignchain_autocomplete'])
+        ;
+    }
+
     public function getParent()
     {
         return TextareaCountType::class;

@@ -15,54 +15,80 @@ limitations under the License.
 #}
 
 {% block autocomplete_widget %}
-    {% stylesheets '@at_css' %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-    {% endstylesheets %}
+    {% if campaignchain_autocomplete is defined %}
+        {% stylesheets '@at_css' %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+        {% endstylesheets %}
 
-    {% javascripts '@at_js' %}
-    <script
-            {% endjavascripts %}
-            {% javascripts '@at_js' %}
-            src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+        {% javascripts '@at_js' %}
+        <script
+                {% endjavascripts %}
+                {% javascripts '@at_js' %}
+                src="{{ asset_url }}"></script>
+        {% endjavascripts %}
 
-    {{ block('textarea_count_widget') }}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#{{ id }}')
+                {% for at,configs in campaignchain_autocomplete %}
+                .atwho({
+                    at: "{{ at }}",
+                    displayTpl: "<li><h5><img src='${image}' height='24' width='24'/> ${display_name} <small>${atwho-at}${insert_name}</small></h5></li>",
+                    insertTpl: "${atwho-at}${insert_name}",
+                    searchKey: "search_key",
+                    limit: 6,
+                    delay: 500,
+                    {% if configs.allow_space is defined and configs.allow_space %}
+                    acceptSpaceBar: true,
+                    {% endif %}
+                    callbacks: {
+                        {% if configs.allow_space is defined and configs.allow_space %}
+                        matcher: function (flag, subtext, should_startWithSpace, acceptSpaceBar) {
+                            flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+                            if (should_startWithSpace) {
+                                flag = '(?:^|\\s)' + flag;
+                            }
+                            _a = decodeURI("%C3%80");
+                            _y = decodeURI("%C3%BF");
+                            space = acceptSpaceBar ? ' \xa0' : '' // NOTE: the only difference from matcher's default implementation
+                            regexp = new RegExp(flag + "([A-Za-z" + _a + "-" + _y + "0-9_" + space + "\'\.\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+                            match = regexp.exec(subtext);
+                            if (match) {
+                                return match[2] || match[1]
+                            } else {
+                                return null;
+                            }
+                        },
+                        {% endif %}
+                        beforeReposition: function(offset) {
+                            var offsetTextarea = $('#{{ id }}').offset();
+                            offset.top = offsetTextarea.top + $('#{{ id }}').outerHeight(true);
+                            offset.left = offsetTextarea.left;
+                        },
+                        /*
+                         It function is given, At.js will invoke it if local filter can not find any data
+                         @param query [String] matched query
+                         @param callback [Function] callback to render page.
+                         */
+                        remoteFilter: function(query, callback) {
+                            if (typeof query === 'string' && query.length < 2)
+                                return;
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#{{ id }}').atwho({
-                at: "@",
-                displayTpl: "<li><h5><img src='${image}' height='32' width='32'/> ${display_name} <small>${atwho-at}${insert_name}</small></h5></li>",
-                insertTpl: "${atwho-at}${insert_name}",
-                searchKey: "search_key",
-                limit: 6,
-                delay: 500,
-                callbacks: {
-                    beforeReposition: function(offset) {
-                        var offsetTextarea = $('#{{ id }}').offset();
-                        offset.top = offsetTextarea.top + $('#{{ id }}').outerHeight(true);
-                        offset.left = offsetTextarea.left;
-                    },
-                    /*
-                     It function is given, At.js will invoke it if local filter can not find any data
-                     @param query [String] matched query
-                     @param callback [Function] callback to render page.
-                     */
-                    remoteFilter: function(query, callback) {
-                        if(query) {
-                            $.getJSON("/api/v1/p/campaignchain/channel-twitter/users/search", {
+                            $.getJSON("{{ configs.endpoint }}", {
                                 q: query,
-                                location: 131,
+                                location: {{ configs.location }},
                             }, function (data) {
                                 callback(data);
                             });
                         }
                     }
-                }
-//            }).atwho({
-//                at: "#",
-//                data: ["hash1", "hash2", "hash3"]
+                })
+            {% endfor %}
+                ;
             });
-        });
-    </script>
+        </script>
+    {% endif %}
+
+    {{ block('textarea_count_widget') }}
+
 {% endblock autocomplete_widget %}
