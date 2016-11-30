@@ -16,6 +16,7 @@ sp_bower:
     bundles:
         CampaignChainAutocompleteFormTypeBundle:
             cache: %kernel.cache_dir%/../bower
+            asset_dir: %kernel.root_dir%/../web/vendor/campaignchain/form-type-autocomplete
 
 assetic:
     bundles:
@@ -23,12 +24,12 @@ assetic:
     assets:
         at_css:
             inputs:
-                - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/components/jquery.atwho/dist/css/jquery.atwho.min.css"
+                - "%kernel.root_dir%/../web/vendor/campaignchain/form-type-autocomplete/jquery.atwho/dist/css/jquery.atwho.min.css"
                 - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/css/base.css"
         at_js:
             inputs:
-                - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/components/Caret.js/dist/jquery.caret.min.js"
-                - "@CampaignChainAutocompleteFormTypeBundle/Resources/public/components/jquery.atwho/dist/js/jquery.atwho.min.js"
+                - "%kernel.root_dir%/../web/vendor/campaignchain/form-type-autocomplete/Caret.js/dist/jquery.caret.min.js"
+                - "%kernel.root_dir%/../web/vendor/campaignchain/form-type-autocomplete/jquery.atwho/dist/js/jquery.atwho.min.js"
 
 twig:
     form:
