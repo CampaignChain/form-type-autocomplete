@@ -32,6 +32,5 @@ assetic:
                 - "%kernel.root_dir%/../web/vendor/campaignchain/form-type-autocomplete/jquery.atwho/dist/js/jquery.atwho.min.js"
 
 twig:
-    form:
-        resources:
-            - 'CampaignChainAutocompleteFormTypeBundle:Form:fields.html.twig'
+    form_themes:
+        - 'CampaignChainAutocompleteFormTypeBundle:Form:fields.html.twig'
