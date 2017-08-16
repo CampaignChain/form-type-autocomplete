@@ -17,7 +17,7 @@
         "docs": "http://doc.campaignchain.com"
     },
     "require": {
-        "campaignchain/form-type-textarea-count": "dev-master"
+        "campaignchain/form-type-textarea-count": "1.0.x-dev"
     },
     "autoload": {
         "psr-4": { "CampaignChain\\AutocompleteFormTypeBundle\\": "" }
